@@ -11,7 +11,8 @@
   "author": "Team Opus",
   "dependencies": {
     "mongoose": "3.5.7",
-    "express": "3.0"
+    "express": "3.0",
+    "socket.io": ">=0.9"
   },
   "homepage" : "https://opus-web.herokuapp.com/"
 }

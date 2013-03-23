@@ -1,6 +1,9 @@
-var express = require('express')
-  , app = express()
-  , mongoose = require ("mongoose");
+var express = require('express'),
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server),
+    mongoose = require ('mongoose'),
+    schema = require('./schema');
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.  
