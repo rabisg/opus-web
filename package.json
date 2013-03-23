@@ -1,0 +1,18 @@
+{
+  "name": "opus",
+  "version": "0.1.0",
+  "description": "Imagine Cup Entry: Team Opus",
+  "main": "app.js",
+  "private" : true,
+  "engines" : { 
+      "node" : "0.8",
+      "npm" : ">=1.1"
+  },
+  "author": "Team Opus",
+  "dependencies": {
+    "mongoose": "3.5.7",
+    "express": "3.0"
+  },
+  "homepage" : "https://opus-web.herokuapp.com/"
+}
+
