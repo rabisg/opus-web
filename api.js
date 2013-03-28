@@ -2,9 +2,12 @@ var schema = require('./schema');
 var Business = schema.Business,
     User = schema.User;
 
-exports.loadResource = function(model) {
+exports.loadResource = function(model, idString) {
+  idString = idString || 'id';
   return function(req, res, next) {
-    model.findById(req.params.id, function(err, resource) {
+    var f = {};
+    f[idString] = req.param(idString);
+    model.findOne(f, function(err, resource) {
       if (err)
         return res.send(500, {error: "Error fetching " + model.toString()});
       else if (!resource)
@@ -118,4 +121,46 @@ exports.allBusiness = function(req, res) {
 
 exports.getBusiness = function(req, res) {
   res.send(200, {business: res.resource});
+};
+
+exports.signup = function(req, res) {
+  if(req.param('password') != req.param('passwordConfirm'))
+    res.send(400, {status:'error', error:'Password fields do not match'});
+  else {
+    var user = new User({
+      phone: req.param('phone'),
+      name:  req.param('name'),
+      email: req.param('email'),
+      password: req.param('password')
+    });
+    user.save( function(err, u){
+      if(err) res.send(400, {status:'error', error: err});
+      else res.send(200, {status:'ok', user:u});
+    });
+  }
+};
+
+exports.login = function(req, res) {
+  if (req.session.user)
+    res.send(400, {status:'error', error:'You are already logged in!'});
+  else {
+    var user = req.resource;
+    if (user && req.param('password') === user.password) {
+      req.session.user = {
+        id: user.id,
+        phone: user.phone,
+        name:  user.name,
+        email: user.email
+      };
+      res.send(200,{ status:'Logged in!'});
+    }
+    else {
+      res.send(403, {status:'error', error:'Invalid email password'});
+    }
+  }
+};
+
+exports.logout = function (req, res) {
+  req.session.user = null;
+  res.send(200, { status:'Logged out'});
 };
