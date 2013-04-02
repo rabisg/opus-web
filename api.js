@@ -41,12 +41,16 @@ exports.addBusiness = function(req, res) {
     workingDays: req.param('workingDays'),
     currency: req.param('currency')
   });
-  business.save(function (err, business) {
+  business.save(function (err, _business) {
     if (err)
       res.send(400, {status:'error', error: err});
-    else
-      res.send(200, {status:'created', id: business.id});
-      //@TODO: Add business_id to user attrib
+    else {
+      User.findOneAndUpdate({phone:phone}, {$push :{business:_business.id}}, {/*upsert:true*/}, function (er, _user) {
+        if (er)
+          console.log(er);
+        res.send(200, {status:'Business successfully created', id: _business.id});
+      });
+    }
   });
 };
 
@@ -120,7 +124,7 @@ exports.addNotification = function(req, res) {
 exports.allBusiness = function(req, res) {
   var limit = req.param('count') || 10,
       reviewed = (req.param('reviewed') && req.param('reviewed')=="true") ? true : false;
-      sortBy = req.param('sortBy') || 'timestamp';
+      sortBy = req.param('sortBy') || {timestamp: -1};
 
   Business
   .find({'reviewed':reviewed})
@@ -160,7 +164,7 @@ exports.login = function(req, res) {
   else {
     var user = req.resource;
     var _user = {
-      _id: user._id,
+      _id: user.id,
       phone: user.phone,
       name:  user.name,
       email: user.email,

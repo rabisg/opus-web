@@ -1,6 +1,35 @@
 /* Global Templates */
 var t_entry, t_business;
 
+$.ajaxSetup({
+    error: function(jqXHR, status, thrownError) {
+        var resp = $.parseJSON(jqXHR.responseText);
+        if(resp.error)
+          if(resp.error.message)
+            notify(resp.error.message, {type:'alert-error'});
+          else
+            notify(resp.error, {type:'alert-error'});
+    }
+});
+
+function notify(text, options) {
+  options = options || {};
+  options.type = options.type || '';
+  options.timeout = options.timeout || 3000;
+
+  $("#status-div").addClass(options.type);
+  $("#status").html(text);
+  $(".status-bar").slideDown();
+  setTimeout(function() {
+    $(".status-bar").slideUp({
+      complete: function(){
+        $("#status-div").removeClass(options.type);
+      },
+      duration: 'fast'
+    });
+  }, options.timeout);
+}
+
 Handlebars.registerHelper('like', function(business) {
   var liked = false;
   if (window.user && business.likedBy.indexOf(window.user._id) != -1)
@@ -38,6 +67,16 @@ Handlebars.registerHelper('review', function(business) {
   if (!business.reviewed)
     result = '<a class="btn btn-small" data-id="' + Handlebars.Utils.escapeExpression(business._id) +'"><i class="icon-pencil"></i></a>';
   return new Handlebars.SafeString(result);
+});
+
+Handlebars.registerHelper('addOffer', function() {
+  console.log(this);
+  if (window.user && window.user.business.indexOf(this._id) != -1) {
+    var result = '<a class="btn-small link" data-id="' + Handlebars.Utils.escapeExpression(this._id);
+    result += '"><i class="icon-plus"></i></a>';
+    return new Handlebars.SafeString(result);
+  }
+  return new Handlebars.SafeString('');
 });
 
 function like (el) {
@@ -88,7 +127,8 @@ router.init();
 $(document).ready(function () {
   $.ajax({
     url: 'api/user/me',
-    async: false
+    async: false,
+    global: false
   }).done(function (resp) {
     $('#nonUserMenu').hide();
     $('#userMenu #name').html(resp.user.name);
@@ -116,8 +156,8 @@ $(document).ready(function () {
     event.preventDefault();
     $.post('/api/user', $('#signupForm').serialize())
     .done(function (resp) {
-      //@TODO: hide modal
-      //@TODO: show alert of successful signup
+      $('#signupModal').modal('hide');
+      notify('Succesful Signup. Please login!', {type:'alert-success'});
     });
   });
 
@@ -125,8 +165,8 @@ $(document).ready(function () {
     event.preventDefault();
     $.post('/api/business', $('#businessForm').serialize())
     .done(function (resp) {
-      //@TODO: hide modal
-      //@TODO: show alert of successful creation
+      $('#businessModal').modal('hide');
+      notify('You have Succesfully created your business!', {type:'alert-success'});
     });
   });
 
