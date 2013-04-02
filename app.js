@@ -8,7 +8,7 @@ var express = require('express'),
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.  
-var uristring = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/opus';
+var uristring = process.env.MONGOLAB_URL || process.env.MONGOHQ_URL || 'mongodb://localhost/opus';
 var AppSecret = 's0m3R@n|)omK3y';
 var port = process.env.PORT || 5000;
 
