@@ -40,7 +40,7 @@ Handlebars.registerHelper('like', function(business) {
   else result += 'like-btn';
   result +='" data-id="' + Handlebars.Utils.escapeExpression(business._id);
   if (liked) result += '">';
-  else result += '" onclick="subscribe(this)">';
+  else result += '" onclick="like(this)">';
   result += '<i class="icon-thumbs-up"></i><span id="likes">' + business.likes + '</span> Likes </a>';
 
   return new Handlebars.SafeString(result);
@@ -165,8 +165,10 @@ $(document).ready(function () {
     event.preventDefault();
     $.post('/api/business', $('#businessForm').serialize())
     .done(function (resp) {
+      user.business.push(resp.id);
       $('#businessModal').modal('hide');
       notify('You have Succesfully created your business!', {type:'alert-success'});
+      window.location.hash = '/business/' + resp.id;
     });
   });
 

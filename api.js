@@ -48,6 +48,7 @@ exports.addBusiness = function(req, res) {
       User.findOneAndUpdate({phone:phone}, {$push :{business:_business.id}}, {/*upsert:true*/}, function (er, _user) {
         if (er)
           console.log(er);
+        req.session.user.business.push(_business.id);
         res.send(200, {status:'Business successfully created', id: _business.id});
       });
     }
@@ -81,7 +82,7 @@ exports.addNotification = function(req, res) {
 exports.like = function(req, res) {
   var business = req.resource;
   var uid = req.session.user ? req.session.user._id : undefined;
-  if (!uid) res.send(403, {status: 'error', error:'Authorization not provided'});
+  if (!uid) res.send(403, {status: 'error', error:'Please login to continue...'});
   else
     if (business.likedBy.indexOf(uid) != -1)
       res.send(400, {status:'error', error:'You already like this'});
@@ -98,7 +99,7 @@ exports.like = function(req, res) {
 exports.subscribe = function(req, res) {
   var business = req.resource;
   var uid = req.session.user ? req.session.user._id : undefined;
-  if (!uid) res.send(403, {status: 'error', error:'Authorization not provided'});
+  if (!uid) res.send(403, {status: 'error', error:'Please login to continue...'});
   else
     if (business.subscribedBy.indexOf(uid) != -1)
       res.send(400, {status:'error', error:'You have already subscribed this'});
