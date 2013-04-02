@@ -3,11 +3,22 @@ var Business = schema.Business,
     User = schema.User;
 
 exports.loadResource = function(model, idString) {
-  idString = idString || 'id';
+  if (idString)
+    return function(req, res, next) {
+      var f = {};
+      f[idString] = req.param(idString);
+      model.findOne(f, function(err, resource) {
+        if (err)
+          return res.send(500, {error: "Error fetching " + model.toString()});
+        else if (!resource)
+          return res.send(404, {error: "Invalid id"});
+        req.resource = resource;
+        next();
+      });
+    };
+  //else
   return function(req, res, next) {
-    var f = {};
-    f[idString] = req.param(idString);
-    model.findOne(f, function(err, resource) {
+    model.findById(req.param('id'), function(err, resource) {
       if (err)
         return res.send(500, {error: "Error fetching " + model.toString()});
       else if (!resource)
@@ -19,9 +30,11 @@ exports.loadResource = function(model, idString) {
 };
 
 exports.addBusiness = function(req, res) {
+  var phone = req.session.user.phone || req.param('phone');
   var business = new Business({
     name: req.param('name'),
     pincode: req.param('pincode'),
+    phone: phone,
     details: req.param('details'),
     category: req.param('category'),
     price: req.param('price'),
@@ -33,6 +46,7 @@ exports.addBusiness = function(req, res) {
       res.send(400, {status:'error', error: err});
     else
       res.send(200, {status:'created', id: business.id});
+      //@TODO: Add business_id to user attrib
   });
 };
 
@@ -62,7 +76,7 @@ exports.addNotification = function(req, res) {
 
 exports.like = function(req, res) {
   var business = req.resource;
-  var uid = req.session.uid || undefined;
+  var uid = req.session.user ? req.session.user._id : undefined;
   if (!uid) res.send(403, {status: 'error', error:'Authorization not provided'});
   else
     if (business.likedBy.indexOf(uid) != -1)
@@ -72,24 +86,24 @@ exports.like = function(req, res) {
       business.likes++;
       business.save(function (err, business) {
         if (err) res.send(400, {status:'error', error: err});
-        else res.send(200, {status:'liked'});
+        else res.send(200, {status:'liked', likes:business.likes});
       });
     }
 };
 
 exports.subscribe = function(req, res) {
   var business = req.resource;
-  var uid = req.session.uid || undefined;
+  var uid = req.session.user ? req.session.user._id : undefined;
   if (!uid) res.send(403, {status: 'error', error:'Authorization not provided'});
   else
     if (business.subscribedBy.indexOf(uid) != -1)
       res.send(400, {status:'error', error:'You have already subscribed this'});
     else {
       business.subscribedBy.push(uid);
-      business.subscribes++;
+      business.subscribers++;
       business.save(function (err, business) {
         if (err) res.send(400, {status:'error', error: err});
-        else res.send(200, {status:'subscribed'});
+        else res.send(200, {status:'subscribed', subscribers:business.subscribers});
       });
     }
 };
@@ -104,7 +118,7 @@ exports.addNotification = function(req, res) {
 };
 
 exports.allBusiness = function(req, res) {
-  var limit = req.param('limit') || 10,
+  var limit = req.param('count') || 10,
       reviewed = (req.param('reviewed') && req.param('reviewed')=="true") ? true : false;
       sortBy = req.param('sortBy') || 'timestamp';
 
@@ -120,7 +134,7 @@ exports.allBusiness = function(req, res) {
 };
 
 exports.getBusiness = function(req, res) {
-  res.send(200, {business: res.resource});
+  res.send(200, req.resource);
 };
 
 exports.signup = function(req, res) {
@@ -145,14 +159,16 @@ exports.login = function(req, res) {
     res.send(400, {status:'error', error:'You are already logged in!'});
   else {
     var user = req.resource;
-    if (user && req.param('password') === user.password) {
-      req.session.user = {
-        id: user.id,
-        phone: user.phone,
-        name:  user.name,
-        email: user.email
-      };
-      res.send(200,{ status:'Logged in!'});
+    var _user = {
+      _id: user._id,
+      phone: user.phone,
+      name:  user.name,
+      email: user.email,
+      business: user.business
+    };
+    if (user && req.param('password') == user.password) {
+      req.session.user = _user;
+      res.send(200,{ status:'Logged in!', user: _user});
     }
     else {
       res.send(403, {status:'error', error:'Invalid email password'});
@@ -163,4 +179,11 @@ exports.login = function(req, res) {
 exports.logout = function (req, res) {
   req.session.user = null;
   res.send(200, { status:'Logged out'});
+};
+
+exports.me = function (req, res) {
+  if(req.session.user)
+    res.send(200,{ status:'Logged in', user: req.session.user});
+  else
+    res.send(403, {status: 'Not logged in'});
 };

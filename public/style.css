@@ -1,6 +1,6 @@
 body{
         background-image:url('images/a.png');
-	background-repeat: repeat;
+	    background-repeat: repeat;
         font-family: 'Roboto Condensed', sans-serif;
     }
     
@@ -113,4 +113,15 @@ body{
 }
 .span5{
 	min-width: 470px;
+}
+
+#search {
+    width: 70%;
+}
+#search:focus {
+    width: 100%;
+}
+
+.link {
+    cursor: pointer;
 }

@@ -12,6 +12,7 @@ userSchema.index({ phone: 1, email: 1});
 var businessSchema = new mongoose.Schema({
   name: String,
   pincode: {type:Number, required:true},
+  phone: {type:String, required:true},
   details: {type:String, required:true},
   category: {type:String, required:true},
   price: {type:Number, required:true},
@@ -24,9 +25,9 @@ var businessSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now }
   }],
   likes: {type:Number, default:0},
-  likedBy: [Number],
+  likedBy: [String],
   subscribers: {type:Number, default:0},
-  subscribedBy: [Number],
+  subscribedBy: [String],
   reviewed: {type:Boolean, default: false},
   timestamp: { type: Date, default: Date.now },
 });

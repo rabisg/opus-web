@@ -4,164 +4,252 @@
   <title>OPUS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href='http://fonts.googleapis.com/css?family=Roboto:700' rel='stylesheet' type='text/css'>
   <link href="style.css" rel="stylesheet" media="screen">
+  <!--<link href='http://fonts.googleapis.com/css?family=Roboto:700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Patrick+Hand+SC' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>-->
 </head>
 <body>
   <div class="container-fluid">
     <div id="header" class="row-fluid">
-      <div class="pull-left"><img src= 'images/logo.png' width='95px' height='24px'></img>
+      <div class="pull-left">
+        <img src= 'images/logo.png' width='95px' height='24px'></img>
       </div>
-      <div class="pull-right"> 
-        <button class="btn btn-primary">Login</button>
-        <button class="btn btn-success">Signup</button>
+      <div class="span4 offset3">
+          <input type="search" id="search" class="input-large search-query centered" placeholder="Search">
+      </div>
+      <div class="pull-right" id="nonUserMenu"> 
+        <a class="btn btn-primary" id="loginBtn" data-toggle="popover" data-placement="bottom" data-html="true">Login</a>
+        <button class="btn btn-success" data-toggle="modal" data-target="#signupModal">Signup</button>
+      </div>
+      <div class="dropdown pull-right" id="userMenu" style="display:none">
+        <a class="dropdown-toggle" data-toggle="dropdown" >Welcome <span id="name"></span> <b class="caret"></b></a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <li><a href="#" data-toggle="modal" data-target="#businessModal">Create Business</a></li>
+          <li><a href="#">Add an offer</a></li>        
+          <li><a href="#">View Business</a></li>
+          <li class="divider"></li>        
+          <li><a>Profile</a></li>
+          <li><a id="logout" class="link">Logout</a></li>
+        </ul>
+      </div>
+      <div id="login" style="display:none">
+        <form id="loginForm" action="javascript:login()">
+          <input type="text" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+          <button class="btn">Sign in</button>
+        </form>
       </div>
     </div>
 
-    <div class="row-fluid category"> Printing, Business Cards Printing, T-Shirt Printing</div>
+    <!-- <div class="row-fluid category"> Business Solutions... Simplified</div> -->
+
+    <!-- Modal -->
+    <div id="signupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Signup</h3>
+      </div>
+      <form class="form-horizontal" id="signupForm">
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Name</label>
+            <div class="controls">
+              <input type="text" name="name" placeholder="Bruce Wayne">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Phone</label>
+            <div class="controls">
+              <input type="tel" name="phone" placeholder="+123456789">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Email</label>
+            <div class="controls">
+              <input type="email" name="email" placeholder="bruce.wayne@bat.org">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputPassword">Password</label>
+            <div class="controls">
+              <input type="password" name="password" placeholder="12@|\|dom">
+            </div>
+          </div>          
+          <div class="control-group">
+            <label class="control-label" for="inputPassword">Password Confirm</label>
+            <div class="controls">
+              <input type="password" name="passwordConfirm" placeholder="12@|\|dom">
+            </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" type="submit">Signup</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="businessModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Create Business</h3>
+      </div>
+      <form class="form-horizontal" id="businessForm">
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Name</label>
+            <div class="controls">
+              <input type="text" name="name" placeholder="Alma Mater T-Shirt Print">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Pincode</label>
+            <div class="controls">
+              <input type="tel" name="pincode" placeholder="560094">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Details</label>
+            <div class="controls">
+              <textarea name="details" placeholder="Description of your business" rows="3" ></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Category</label>
+            <div class="controls">
+              <input type="text" name="category" placeholder="T-Shirt Printing">
+            </div>
+          </div>          
+          <div class="control-group">
+            <label class="control-label">Price</label>
+            <div class="controls">
+              <input type="number" name="price" placeholder="300">
+            </div>
+          </div>          
+          <div class="control-group">
+            <label class="control-label">Working Days</label>
+            <div class="controls">
+              <input type="text" name="workingDays" placeholder="Monday to Saturday">
+            </div>
+          </div>        
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" type="submit">Create</button>
+        </div>
+      </form>
+    </div>
 
     <div class="row-fluid">
       <div class="span10" id="leftbar">
         <div class="row-fluid">
           <div class="span3">
-           <div class="arrow_box"><b><p class="subtext">Not Reviewed</p></b></div>
-           <div class="li-item li-item-first white-bg">
-            <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-            <div class="btn-grp">
-              <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-              <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-              <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
+            <div class="arrow_box"><b><p class="subtext">Not Reviewed</p></b></div>
+            <div id="not-reviewedList">
             </div>
           </div>
-          <div class="li-item white-bg">
-            <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-            <div class="btn-grp">
-              <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-              <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-              <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-            </div>
-          </div>
-          <div class="li-item white-bg">
-            <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-            <div class="btn-grp">
-              <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-              <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-              <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-            </div>
-          </div>
-          <div class="li-item white-bg">
-            <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-            <div class="btn-grp">
-              <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-              <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-              <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-            </div>
-          </div>
-          <div class="li-item white-bg">
-            <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-            <div class="btn-grp">
-              <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-              <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-              <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-            </div>
-          </div>
-        </div>
         <div class="span3">
-         <div class="arrow_box"><b><p class="subtext">Reviewed</p></b></div>
-         <div class="li-item li-item-first white-bg">
-          <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-          <div class="btn-grp">
-            <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-            <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-            <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
+          <div class="arrow_box"><b><p class="subtext">Reviewed</p></b></div>
+          <div id="reviewedList">
           </div>
         </div>
-        <div class="li-item white-bg">
-          <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-          <div class="btn-grp">
-            <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-            <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-            <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-          </div>
-        </div>
-        <div class="li-item white-bg">
-          <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-          <div class="btn-grp">
-            <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-            <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-            <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-          </div>
-        </div>
-        <div class="li-item white-bg">
-          <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-          <div class="btn-grp">
-            <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-            <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-            <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-          </div>
-        </div>
-        <div class="li-item white-bg">
-          <b>Printox:</b> Complete color print 24x7 Service. Home delivery also available!
-          <div class="btn-grp">
-            <a class="btn btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-            <a class="btn btn-small" href="#"><i class="icon-bookmark"></i> 89</a>
-            <a class="btn btn-small" href="#"><i class="icon-pencil"></i></a>                              
-          </div>
-        </div>
-      </div>
 
-      <div class="span5 white-bg">
+      <div class="span5 white-bg" id="content">
         <h3 class="title">Alma mater - T shirt print</h3>
         Alma matter aims to provide students and alumni of premier schools
         and colleges across India with a ameans of expressing their pride
-        at being products of such reputed institutions. Out customers take
+        at being products of such reputed institutions. Out stomers take
         great pleasure in maing their school or college colours a part of
         their everyday wardrobeand lives.
         <div class="btn-grp">
-          <a class="btn-small" href="#"><i class="icon-thumbs-up"></i> 77 likes</a>
-          <a class="btn-small" href="#"><i class="icon-bookmark"></i> 89 subscribers</a>                      
+          <a class="btn-small" ><i class="icon-thumbs-up"></i> 77 likes</a>
+          <a class="btn-small" ><i class="icon-bookmark"></i> 89 subscribers</a>                      
         </div> <br/>
         <div class="well gray-bg">                            
-         Location: Nayi Panvel, Bangalore Area, India - 560094 <br /><br />
-         Time of availabilty: 8 AM to 8 PM <br /><br />
-         Cost of Service: Rs.300 per T Shirt                            
-       </div>
-       <div class="well lblue-bg" id="show2" style="display:none">                            
-         <b>19th May: New stocks arrived. Check out our latest collection!</b>                         
-       </div>
-       <div class="well lblue-bg" id="show1" style="display:none">                            
-         <b>4th May: End of season sale</b>                         
-       </div>
-       <div class="well lblue-bg">                            
-         <b>28th April: New Deals available on Hoodies</b>                         
-       </div>
-       <div class="well lblue-bg">                            
-         <b>2nd March: Rs.50 discount on saale of 5 tshirts</b>                         
-       </div>
-       <div class="well lblue-bg">                            
-         <b>1st Jan: Shifting office from Kormangala to new location</b>                         
-       </div>
-     </div>
+          Location: Nayi Panvel, Bangalore Area, India - 560094 <br /><br />
+          Time of availabilty: 8 AM to 8 PM <br /><br />
+          Cost of Service: Rs.300 per T Shirt                            
+        </div>
+        <div class="well lblue-bg" id="show2" style="display:none">                            
+          <b>19th May: New stocks arrived. Check out our latest collection!</b>                         
+        </div>
+        <div class="well lblue-bg" id="show1" style="display:none">                            
+          <b>4th May: End of season sale</b>                         
+        </div>
+        <div class="well lblue-bg">                            
+          <b>28th April: New Deals available on Hoodies</b>                         
+        </div>
+        <div class="well lblue-bg">                            
+          <b>2nd March: Rs.50 discount on saale of 5 tshirts</b>                         
+        </div>
+        <div class="well lblue-bg">                            
+          <b>1st Jan: Shifting office from Kormangala to new location</b>                         
+        </div>
+      </div>
    </div>
  </div>
  <div class="span2">
   <div id="thumbs"></div>
   <ul class="nav nav-list">
     <li class="nav-header">Sort vertically by: </li>
-    <li><a href="#">Location</a></li>
-    <li><a href="#">Quality/Rating</a></li>
-    <li><a href="#">Cost of Service</a></li>
+    <li><a >Location</a></li>
+    <li><a >Quality/Rating</a></li>
+    <li><a >Cost of Service</a></li>
     <li class="nav-header">Sort horizontally by:</li>
-    <li><a href="#">Quality/Rating</a></li>
-    <li><a href="#">Timing</a></li>
+    <li><a >Quality/Rating</a></li>
+    <li><a >Timing</a></li>
   </ul>
 </div>
 </div>
 </div>
-<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/handlebar.js"></script>
+<script src="js/lib/director.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
-
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>
+<script>
+  var socket = io.connect('https://opus-web.herokuapp.com');
+  socket.on('update', function (data) {
+    console.log(data);
+  });
+  socket.on('new', function(data){
+    console.log(data);
+  })
+</script>
+<div id="template-holder">
+  <script id="entry-template" type="text/x-handlebars-template">
+    {{#each list}}
+    <div class="li-item li-item-first white-bg cards">
+      <b>{{this.name}}:</b> {{this.details}}
+      <div class="btn-grp">
+        {{#like this}}{{/like}}
+        {{#subscribe this}}{{/subscribe}}
+        {{#review this}}{{/review}}                              
+      </div>          
+      <a href="#/business/{{this._id}}">More...</a>
+    </div>
+    {{/each}}
+  </script>
+  <script type="text/x-handlebars-template" id="business-template">
+    <h3 class="title">{{name}}</h3>
+    {{details}}
+    <div class="btn-grp">
+      <a class="btn-small link" data-id="{{_id}}" ><i class="icon-thumbs-up"></i> {{likes}} likes</a>
+      <a class="btn-small link" data-id="{{_id}}" ><i class="icon-bookmark"></i> {{subscribers}} subscribers</a>                  
+    </div> <br/>
+    <div class="well gray-bg">                            
+      <b>Pincode:</b> {{pincode}} <br /><br />
+      <b>Working Days:</b> {{workingDays}} <br /><br />
+      <b>Cost of Service:</b> Rs.{{price}}                            
+    </div>
+    {{#each notifications}}
+    <div class="well lblue-bg" class="notifications">                            
+      <b>{{this.title}}:</b> {{this.body}}                         
+    </div>
+    {{/each}}
+  </script>
+</div>
 </body>
 </html>

@@ -29,8 +29,9 @@ app.post('/api/business/:id', api.loadResource(Business), api.addNotification);
 app.get('/api/business/:id', api.loadResource(Business), api.getBusiness);
 app.post('/api/business/:id/like', api.loadResource(Business), api.like);
 app.post('/api/business/:id/subscribe', api.loadResource(Business), api.subscribe);
-app.get('/api/business', api.allBusiness); //limit, sortBy and reviewed params accepted
+app.get('/api/business', api.allBusiness); //count, sortBy and reviewed params accepted
 app.post('/api/user', api.addUser);
+app.get('/api/user/me', api.me);
 app.post('/api/user/signup', api.signup);
 app.get('/api/user/logout', api.logout);
 app.post('/api/user/login', api.loadResource(User, 'email'), api.login);
