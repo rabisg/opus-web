@@ -126,8 +126,11 @@ exports.allBusiness = function(req, res) {
       reviewed = (req.param('reviewed') && req.param('reviewed')=="true") ? true : false;
       sortBy = req.param('sortBy') || {timestamp: -1};
 
+  var find = {'reviewed':reviewed};
+  if (req.param('category'))
+    find.category = req.param('category');
   Business
-  .find({'reviewed':reviewed})
+  .find(find)
   .limit(limit)
   .sort(sortBy)
   .select('id name pincode details category likes subscribers likedBy subscribedBy')
