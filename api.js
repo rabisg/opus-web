@@ -48,7 +48,7 @@ exports.addBusiness = function(req, res) {
       User.findOneAndUpdate({phone:phone}, {$push :{business:_business.id}}, {upsert:true}, function (er, _user) {
         if (er)
           console.log(er);
-        req.session.user.business.push(_business.id);
+        if(req.session && req.session.user) req.session.user.business.push(_business.id);
         res.send(200, {status:'Business successfully created', id: _business.id, user: _user.id});
       });
     }
