@@ -30,7 +30,7 @@ exports.loadResource = function(model, idString) {
 };
 
 exports.addBusiness = function(req, res) {
-  var phone = req.session.user.phone || req.param('phone');
+  var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');
   var business = new Business({
     name: req.param('name'),
     pincode: req.param('pincode'),
@@ -45,11 +45,11 @@ exports.addBusiness = function(req, res) {
     if (err)
       res.send(400, {status:'error', error: err});
     else {
-      User.findOneAndUpdate({phone:phone}, {$push :{business:_business.id}}, {/*upsert:true*/}, function (er, _user) {
+      User.findOneAndUpdate({phone:phone}, {$push :{business:_business.id}}, {upsert:true}, function (er, _user) {
         if (er)
           console.log(er);
         req.session.user.business.push(_business.id);
-        res.send(200, {status:'Business successfully created', id: _business.id});
+        res.send(200, {status:'Business successfully created', id: _business.id, user: _user.id});
       });
     }
   });
@@ -72,11 +72,19 @@ exports.addUser = function(req, res) {
 
 exports.addNotification = function(req, res) {
   var business = req.resource;
-  business.notifications.push({ title: req.param('title'), body: req.param('body') });
-  business.save( function (err, business) {
-    if (err) res.send(400, {status:'error', error: err});
-    else res.send(200, {status:'updated'});
-  });
+  var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');
+  if (phone && business.phone == phone) {
+    var date = new Date(),
+    month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    title = req.param('title') || date.getDate() + ' ' + month[date.getMonth()];
+    business.notifications.push({ title: title, body: req.param('body') });
+    business.save( function (err, business) {
+      if (err) res.send(400, {status:'error', error: err});
+      else res.send(200, {status:'updated'});
+    });
+  }
+  else
+    res.send(403, {status:'error', error:'You are not the owner of this business!'});
 };
 
 exports.like = function(req, res) {
@@ -111,15 +119,6 @@ exports.subscribe = function(req, res) {
         else res.send(200, {status:'subscribed', subscribers:business.subscribers});
       });
     }
-};
-
-exports.addNotification = function(req, res) {
-  var business = req.resource;
-  business.notifications.push({ title: req.param('title'), body: req.param('body') });
-  business.save( function (err, business) {
-    if (err) res.send(400, {status:'error', error: err});
-    else res.send(200, {status:'updated'});
-  });
 };
 
 exports.allBusiness = function(req, res) {
