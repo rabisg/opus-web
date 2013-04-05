@@ -86,7 +86,7 @@ exports.addNotification = function(req, res) {
     });
   }
   else
-    res.send(403, {status:'error', error:'You are not the owner of this business!'});
+    res.send(403, {status:'error', error:'You are not the owner of this business! Your phone number is' + phone});
 };
 
 exports.like = function(req, res) {
