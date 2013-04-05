@@ -31,6 +31,7 @@ exports.loadResource = function(model, idString) {
 
 exports.addBusiness = function(req, res) {
   var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');
+  var reviewed = (req.session && req.session.user) ? true : false;
   var business = new Business({
     name: req.param('name'),
     pincode: req.param('pincode'),
@@ -39,7 +40,8 @@ exports.addBusiness = function(req, res) {
     category: req.param('category'),
     price: req.param('price'),
     workingDays: req.param('workingDays'),
-    currency: req.param('currency')
+    currency: req.param('currency'),
+    reviewed: reviewed
   });
   business.save(function (err, _business) {
     if (err)
@@ -123,7 +125,7 @@ exports.subscribe = function(req, res) {
 
 exports.allBusiness = function(req, res) {
   var limit = req.param('count') || 10,
-      reviewed = (req.param('reviewed') && req.param('reviewed')=="true") ? true : false;
+      reviewed = (req.param('reviewed') && req.param('reviewed')=="false") ? false : true;
       sortBy = req.param('sortBy') || {timestamp: -1};
 
   var find = {'reviewed':reviewed};
