@@ -1,4 +1,5 @@
-var schema = require('./schema');
+var schema = require('./schema'),
+    fs = require('fs');
 var Business = schema.Business,
     User = schema.User;
 
@@ -195,4 +196,20 @@ exports.me = function (req, res) {
     res.send(200,{ status:'Logged in', user: req.session.user});
   else
     res.send(403, {status: 'Not logged in'});
+};
+
+exports.upload = function(req, res) {
+  fs.readFile(req.files.filename.path, function (err, data) {
+    if (err)
+      res.send(400, {error: err});
+    else {
+      var newPath = __dirname + "/public/recordings/" + req.param('id');
+      fs.writeFile(newPath, data, function (err) {
+        if (err)
+          res.send(400, {error: err});
+        else
+          res.send(200, {status:'created'});
+      });
+    }
+  });
 };

@@ -35,6 +35,7 @@ app.get('/api/user/me', api.me);
 app.post('/api/user/signup', api.signup);
 app.get('/api/user/logout', api.logout);
 app.post('/api/user/login', api.loadResource(User, 'email'), api.login);
+app.post('/api/upload/:id', api.upload);
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
