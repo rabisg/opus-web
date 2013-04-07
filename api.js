@@ -73,6 +73,37 @@ exports.addUser = function(req, res) {
   });
 };
 
+exports.editBusiness = function(req, res) {
+  var phone = req.session.user ? req.session.user.phone : req.param('phone');
+  if (phone) {
+    var business = req.resource;
+    if (req.param('name'))
+      business.name = req.param('name');
+    if (req.param('details'))
+      business.details = req.param('details');
+    business.save( function(err, business) {
+      if (err) res.send(400, {status:'error', error: err});
+      else res.send(200, {status:'updated'});
+    });
+  }
+  else
+    res.send(403, {error: 'Authentication not provided'});
+};
+
+exports.reviewBusiness = function(req, res) {
+  var phone = req.session.user ? req.session.user.phone : req.param('phone');
+  if (phone) {
+    var business = req.resource;
+    business.reviewed = true;
+    business.save( function(err, business) {
+      if (err) res.send(400, {status:'error', error: err});
+      else res.send(200, {status:'updated'});
+    });
+  }
+  else
+    res.send(403, {error: 'Authentication not provided'});
+};
+
 exports.addNotification = function(req, res) {
   var business = req.resource;
   var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');

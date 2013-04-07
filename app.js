@@ -26,6 +26,8 @@ app.configure(function() {
 
 app.post('/api/business', api.addBusiness);
 app.post('/api/business/:id', api.loadResource(Business), api.addNotification);
+app.post('/api/business/:id/edit', api.loadResource(Business), api.editBusiness);
+app.post('/api/business/:id/review', api.loadResource(Business), api.reviewBusiness);
 app.get('/api/business/:id', api.loadResource(Business), api.getBusiness);
 app.post('/api/business/:id/like', api.loadResource(Business), api.like);
 app.post('/api/business/:id/subscribe', api.loadResource(Business), api.subscribe);
