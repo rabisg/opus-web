@@ -171,7 +171,7 @@ exports.allBusiness = function(req, res) {
   .find(find)
   .limit(limit)
   .sort(sortBy)
-  .select('id name pincode details category likes subscribers likedBy subscribedBy reviewed')
+  .select('id name pincode details category likes subscribers likedBy subscribedBy reviewed recordURI')
   .exec(function (err, businesses) {
     if(err) res.send(400, {status:'error', error: err});
     else res.send(200, {status:'ok', list: businesses});
