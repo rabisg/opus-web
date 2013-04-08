@@ -272,7 +272,7 @@
       {{else}}
         <em>This business has not been reviewed yet</em>
         {{#if this.recordURI}}
-          <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+          <a href="/recordings/{{this.recordURI}}" target="_blank"> &nbsp;<i class="icon-play"</i>Recording</a>
         {{/if}}
       {{/if}}
       <div class="cat">Category: {{this.category}}</div>
@@ -312,20 +312,20 @@
     {{/each}}
   </script>
   <script type="text/x-handlebars-template" id="search-template">
-  {{#each list}}
-  <a href="#/business/{{this._id}}">
-    <div class="li-item li-item-first white-bg cards link">    
-      {{#if this.name}}
-        <b>{{this.name}}:</b> {{this.details}}
-      {{else}}
-        <em>This business has not been reviewed yet</em> &nbsp;
-        {{#if this.recordURI}}
-          <a href="/recordings/{{this.recordURI}}" target="_blank"><i class="icon-play"</i>Recording</a>
+    {{#each list}}
+    <a href="#/business/{{this._id}}">
+      <div class="li-item li-item-first white-bg cards link">    
+        {{#if this.name}}
+          <b>{{this.name}}:</b> {{this.details}}
+        {{else}}
+          <em>This business has not been reviewed yet</em>
+          {{#if this.recordURI}}
+            <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+          {{/if}}
         {{/if}}
-      {{/if}}
-    </div>
-  </a>
-  {{/each}}
+      </div>
+    </a>
+    {{/each}}
   </script>
 </div>
 </body>
