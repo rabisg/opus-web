@@ -32,7 +32,7 @@ function notify(text, options) {
 
 Handlebars.registerHelper('convert', function(body){
   console.log(body);
-  if (body && body.substring(0, 4)=='[HI]')
+  if (body && body.substring(0, 5)=='HINDI')
     return new Handlebars.SafeString('नयी सुविधा का लाभ उठाने के लिए आज ही हमारे दुकान पे आये');
   if (body)
     return new Handlebars.SafeString(body);

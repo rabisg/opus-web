@@ -193,3 +193,8 @@ border-width: 1px;
 .subtext {
     font-size: 1.2em;
 }
+
+.category {
+    height: 50px;
+    background-color: white;
+}
