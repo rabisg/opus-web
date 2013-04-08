@@ -234,6 +234,7 @@ exports.me = function (req, res) {
 };
 
 exports.upload = function(req, res) {
+  console.log(req.files);
   fs.readFile(req.files.filename.path, function (err, data) {
     if (err)
       res.send(400, {error: err});
