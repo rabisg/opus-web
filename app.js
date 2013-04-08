@@ -4,7 +4,8 @@ var express = require('express'),
     io = require('socket.io').listen(server),
     mongoose = require ('mongoose'),
     api = require('./api'),
-    schema = require('./schema');
+    schema = require('./schema')
+    fs = require('fs');
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.  
@@ -17,6 +18,7 @@ var Business = schema.Business,
 
 
 app.configure(function() {
+  app.set('port', port);
   app.use(express.cookieParser());
   app.use(express.session({ secret: AppSecret }));
   app.use(express.bodyParser());
@@ -38,6 +40,9 @@ app.post('/api/user/signup', api.signup);
 app.get('/api/user/logout', api.logout);
 app.post('/api/user/login', api.loadResource(User, 'email'), api.login);
 app.post('/api/upload/:id', api.upload);
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/public/index.html');
+});
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.

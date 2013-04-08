@@ -216,14 +216,18 @@ $(document).ready(function () {
       window.location.hash='/search/' + $('#search').val();
   });
 
-  $.ajax('/api/business?reviewed=false&count=5')
-  .done(function(resp){
-    var html = t_entry(resp);
-    $('#not-reviewedList').html(html);
-  });
-  $.ajax('/api/business?reviewed=true&count=5')
-  .done(function(resp){
-    var html = t_entry(resp);
-    $('#reviewedList').html(html);
-  });
+  setInterval(function(){
+    $.ajax('/api/business?reviewed=false&count=5')
+    .done(function(resp){
+      var html = t_entry(resp);
+      $('#not-reviewedList').html(html);
+    });
+  }, 2000);
+  setInterval(function(){
+    $.ajax('/api/business?reviewed=true&count=5')
+    .done(function(resp){
+      var html = t_entry(resp);
+      $('#reviewedList').html(html);
+    });
+  }, 2000);
 });

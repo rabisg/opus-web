@@ -255,7 +255,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/index.js"></script>
 <script>
-  var socket = io.connect('http://opus-web.herokuapp.com');
+  var socket = io.connect(window.location.hostname);
   socket.on('news', function (data) {
     console.log(data);
   });
