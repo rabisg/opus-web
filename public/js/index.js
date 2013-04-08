@@ -57,7 +57,7 @@ Handlebars.registerHelper('subscribe', function(business) {
   result +='" data-id="' + Handlebars.Utils.escapeExpression(business._id);
   if (subscribed) result += '">';
   else result += '" onclick="subscribe(this)">';
-  result += '<i class="icon-bookmark"></i><span id="subscribers">' + business.likes + '</span></a>';
+  result += '<i class="icon-bookmark"></i><span id="subscribers">' + business.subscribers + '</span></a>';
 
   return new Handlebars.SafeString(result);
 });
@@ -119,12 +119,16 @@ function login () {
 }
 
 function showBusiness (id) {
-  $.ajax('/api/business/'+ id)
-  .done(function (resp) {
-    resp.notifications = resp.notifications.sort(function(a, b){ return a.timestamp < b.timestamp ;});
-    var html = t_business(resp);
-    $('#content').html(html);
-  });
+  if (window.interval)
+    window.clearInterval(window.interval);
+  window.interval = setInterval(function() {
+    $.ajax('/api/business/'+ id)
+    .done(function (resp) {
+      resp.notifications = resp.notifications.sort(function(a, b){ return a.timestamp < b.timestamp ;});
+      var html = t_business(resp);
+      $('#content').html(html);
+    });
+  }, 2000);
 }
 
 function search(s) {

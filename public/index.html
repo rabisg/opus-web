@@ -5,25 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="style.css" rel="stylesheet" media="screen">
-  <!--<link href='http://fonts.googleapis.com/css?family=Roboto:700' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Patrick+Hand+SC' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>-->
+  <!--<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>-->
 </head>
 <body>
   <div class="container-fluid">
     <div id="header" class="row-fluid">
       <div class="pull-left">
-        <img src= 'images/logo.png' width='95px' height='24px'></img>
+        <img src= 'images/logo.png' width='200px'></img>
       </div>
-      <div class="span4 offset3">
-          <input type="search" id="search" class="input-large search-query centered" placeholder="Search">
+      <div class="span2 offset1">
+          <input type="search" id="search" placeholder="Search">
+      </div>
+      <div class="span3">
+        <img src= 'images/bg.png' class="top-bg"></img>
       </div>
       <div class="pull-right" id="nonUserMenu"> 
-        <a class="btn btn-primary" id="loginBtn" data-toggle="popover" data-placement="bottom" data-html="true">Login</a>
-        <button class="btn btn-success" data-toggle="modal" data-target="#signupModal">Signup</button>
+        <button class="top-btn" >
+          <a id="loginBtn" class="top-btn-content" data-toggle="popover" data-placement="bottom" data-html="true">Login</a>
+        </button>
+        <button class="top-btn" data-toggle="modal" data-target="#signupModal" >Signup</button>
       </div>
-      <div class="dropdown pull-right" id="userMenu" style="display:none">
-        <a class="dropdown-toggle" data-toggle="dropdown" >Welcome <span id="name"></span> <b class="caret"></b></a>
+      <div class="dropdown pull-right" id="userMenu" style="display:none; margin-top:15px;">
+        <a class="dropdown-toggle" data-toggle="dropdown" style="color:white;">Welcome <span id="name"></span> <b class="caret"></b></a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
           <li><a href="#" data-toggle="modal" data-target="#businessModal">Create Business</a></li>
           <li><a href="#">View Business</a></li>
@@ -193,17 +196,17 @@
       <div class="span10" id="leftbar">
         <div class="row-fluid">
           <div class="span3">
-            <div class="arrow_box"><b><p class="subtext">Not Reviewed</p></b></div>
+            <div class=""><p class="subtext gray2">Not Reviewed</p></div>
             <div id="not-reviewedList">
             </div>
           </div>
         <div class="span3">
-          <div class="arrow_box"><b><p class="subtext">Reviewed</p></b></div>
+          <div class=""><p class="subtext gray2">Reviewed</p></div>
           <div id="reviewedList">
           </div>
         </div>
 
-      <div class="span5 white-bg" id="content">
+      <div class="span5" id="content">
         <h3 class="title">Alma mater - T shirt print</h3>
         Alma matter aims to provide students and alumni of premier schools
         and colleges across India with a ameans of expressing their pride
@@ -241,9 +244,9 @@
   <div id="thumbs"></div>
   <ul class="nav nav-list">
     <li class="nav-header">Sort vertically by: </li>
-    <li><a >Location</a></li>
-    <li><a >Quality/Rating</a></li>
-    <li><a >Cost of Service</a></li>
+    <li><a class="orange">Location</a></li>
+    <li><a class="orange">Quality/Rating</a></li>
+    <li><a class="orange">Cost of Service</a></li>
   </ul>
 </div>
 </div>
@@ -285,6 +288,7 @@
   <script type="text/x-handlebars-template" id="business-template">
     {{#if name}}
       <h3 class="title">{{name}}</h3>
+      <hr />
       {{details}}
     {{else}}
       <em> This business has not been reviewed yet </em> <br />
@@ -293,17 +297,17 @@
       {{/if}}
     {{/if}}
     <div class="btn-grp">
-      <a class="btn-small link" data-id="{{_id}}" ><i class="icon-thumbs-up"></i> {{likes}} likes</a>
-      <a class="btn-small link" data-id="{{_id}}" ><i class="icon-bookmark"></i> {{subscribers}} subscribers</a>  
+      <a class="btn-small link orange" data-id="{{_id}}" ><i class="icon-thumbs-up"></i><b> {{likes}} likes</b></a>
+      <a class="btn-small link orange" data-id="{{_id}}" ><i class="icon-bookmark"></i><b> {{subscribers}} subscribers</b></a>  
       {{#addOffer}}{{/addOffer}}                
     </div> <br/>
-    <div class="well gray-bg">                            
+    <div class="well white-bg">                            
       <b>Pincode:</b> {{pincode}} <br /><br />
       <b>Working Days:</b> {{workingDays}} <br /><br />
       <b>Cost of Service:</b> Rs.{{price}}                            
     </div>
     {{#each notifications}}
-    <div class="well lblue-bg" class="notifications">                            
+    <div class="well white-bg orange" class="notifications" style="border:0;">                            
       <b>{{this.title}}:</b> {{this.body}}                         
     </div>
     {{/each}}

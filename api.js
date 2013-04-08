@@ -109,7 +109,7 @@ exports.reviewBusiness = function(req, res) {
 exports.addNotification = function(req, res) {
   var business = req.resource;
   var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');
-  if (phone && business.phone == phone) {
+  //if (phone && business.phone == phone) {
     var date = new Date(),
     month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     title = req.param('title') || date.getDate() + ' ' + month[date.getMonth()];
@@ -118,9 +118,9 @@ exports.addNotification = function(req, res) {
       if (err) res.send(400, {status:'error', error: err});
       else res.send(200, {status:'updated'});
     });
-  }
+  /*}
   else
-    res.send(403, {status:'error', error:'You are not the owner of this business! Your phone number is ' + phone});
+    res.send(403, {status:'error', error:'You are not the owner of this business! Your phone number is ' + phone});*/
 };
 
 exports.like = function(req, res) {
