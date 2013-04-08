@@ -30,6 +30,15 @@ function notify(text, options) {
   }, options.timeout);
 }
 
+Handlebars.registerHelper('convert', function(body){
+  console.log(body);
+  if (body && body.substring(0, 4)=='[HI]')
+    return new Handlebars.SafeString('नयी सुविधा का लाभ उठाने के लिए आज ही हमारे दुकान पे आये');
+  if (body)
+    return new Handlebars.SafeString(body);
+  return new Handlebars.SafeString('');
+});
+
 Handlebars.registerHelper('like', function(business) {
   var liked = false;
   if (window.user && business.likedBy.indexOf(window.user._id) != -1)

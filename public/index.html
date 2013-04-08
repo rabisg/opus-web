@@ -308,7 +308,7 @@
     </div>
     {{#each notifications}}
     <div class="well white-bg orange" class="notifications" style="border:0;">                            
-      <b>{{this.title}}:</b> {{this.body}}                         
+      <b>{{this.title}}:</b> {{#convert this.body}}{{/convert}}
     </div>
     {{/each}}
   </script>
