@@ -52,3 +52,7 @@ mongoose.connect(uristring, function (err, res) {
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+});

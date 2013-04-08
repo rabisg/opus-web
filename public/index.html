@@ -255,13 +255,10 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/index.js"></script>
 <script>
-  var socket = io.connect('https://opus-web.herokuapp.com');
-  socket.on('update', function (data) {
+  var socket = io.connect('http://opus-web.herokuapp.com');
+  socket.on('news', function (data) {
     console.log(data);
   });
-  socket.on('new', function(data){
-    console.log(data);
-  })
 </script>
 <div id="template-holder">
   <script id="entry-template" type="text/x-handlebars-template">
