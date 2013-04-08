@@ -286,8 +286,15 @@
     {{/each}}
   </script>
   <script type="text/x-handlebars-template" id="business-template">
-    <h3 class="title">{{name}}</h3>
-    {{details}}
+    {{#if name}}
+      <h3 class="title">{{name}}</h3>
+      {{details}}
+    {{else}}
+      <em> This business has not been reviewed yet </em> <br />
+      {{#if recordURI}}
+        <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+      {{/if}}
+    {{/if}}
     <div class="btn-grp">
       <a class="btn-small link" data-id="{{_id}}" ><i class="icon-thumbs-up"></i> {{likes}} likes</a>
       <a class="btn-small link" data-id="{{_id}}" ><i class="icon-bookmark"></i> {{subscribers}} subscribers</a>  
@@ -311,9 +318,9 @@
       {{#if this.name}}
         <b>{{this.name}}:</b> {{this.details}}
       {{else}}
-        <em>This business has not been reviewed yet</em>
+        <em>This business has not been reviewed yet</em> &nbsp;
         {{#if this.recordURI}}
-          <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+          <a href="/recordings/{{this.recordURI}}" target="_blank"><i class="icon-play"</i>Recording</a>
         {{/if}}
       {{/if}}
     </div>
