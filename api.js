@@ -234,18 +234,19 @@ exports.me = function (req, res) {
 };
 
 exports.upload = function(req, res) {
-  console.log(req.files);
-  fs.readFile(req.files.filename.path, function (err, data) {
-    if (err)
-      res.send(400, {error: err});
-    else {
-      var newPath = __dirname + "/public/recordings/" + req.param('id');
-      fs.writeFile(newPath, data, function (err) {
-        if (err)
-          res.send(400, {error: err});
-        else
-          res.send(200, {status:'created'});
-      });
-    }
-  });
+  if (req.files && req.files.filename) {
+    fs.readFile(req.files.filename.path, function (err, data) {
+      if (err)
+        res.send(400, {error: err});
+      else {
+        var newPath = __dirname + "/public/recordings/" + req.param('id');
+        fs.writeFile(newPath, data, function (err) {
+          if (err)
+            res.send(400, {error: err});
+          else
+            res.send(200, {status:'created'});
+        });
+      }
+    });
+  }
 };
