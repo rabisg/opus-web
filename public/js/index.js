@@ -1,5 +1,5 @@
 /* Global Templates */
-var t_entry, t_business;
+var t_entry, t_business, t_search;
 
 $.ajaxSetup({
     error: function(jqXHR, status, thrownError) {
@@ -64,16 +64,15 @@ Handlebars.registerHelper('subscribe', function(business) {
 
 Handlebars.registerHelper('review', function(business) {
   var result = '';
-  if (!business.reviewed)
-    result = '<a class="btn btn-small" data-id="' + Handlebars.Utils.escapeExpression(business._id) +'"><i class="icon-pencil"></i></a>';
+  if (business.reviewed === false)
+    result = '<a class="btn btn-small" data-id="' + Handlebars.Utils.escapeExpression(business._id) +'" onclick="review(this)" data-toggle="modal" data-target="#reviewModal"><i class="icon-pencil"></i></a>';
   return new Handlebars.SafeString(result);
 });
 
 Handlebars.registerHelper('addOffer', function() {
-  console.log(this);
   if (window.user && window.user.business.indexOf(this._id) != -1) {
     var result = '<a class="btn-small link" data-id="' + Handlebars.Utils.escapeExpression(this._id);
-    result += '"><i class="icon-plus"></i></a>';
+    result += '" data-toggle="modal" data-target="#addOfferModal" onclick="addOfferModal(this)"><i class="icon-plus"></i></a>';
     return new Handlebars.SafeString(result);
   }
   return new Handlebars.SafeString('');
@@ -98,6 +97,15 @@ function subscribe (el) {
   });
 }
 
+function addOfferModal (el) {
+  var $el = $(el);
+  window.addOfferFor = $el.attr('data-id');
+}
+function review (el) {
+  var $el = $(el);
+  window.reviewFor = $el.attr('data-id');
+}
+
 function login () {
 	$.post('/api/user/login', $('#nonUserMenu #loginForm').serialize())
 	.done(function (resp) {
@@ -113,13 +121,24 @@ function login () {
 function showBusiness (id) {
   $.ajax('/api/business/'+ id)
   .done(function (resp) {
+    resp.notifications = resp.notifications.sort(function(a, b){ return a.timestamp < b.timestamp ;});
     var html = t_business(resp);
     $('#content').html(html);
   });
 }
 
+function search(s) {
+  $.ajax('/api/business/?category='+ s)
+  .done(function (resp) {
+    console.log(resp);
+    var html = t_search(resp);
+    $('#content').html(html);
+  });
+}
+
 var routes = {
-  '/business/:id': showBusiness
+  '/business/:id': showBusiness,
+  '/search/:s': search
 };
 var router = Router(routes);
 router.init();
@@ -138,6 +157,7 @@ $(document).ready(function () {
 
   t_entry = Handlebars.compile($("#entry-template").html());
   t_business = Handlebars.compile($("#business-template").html());
+  t_search = Handlebars.compile($("#search-template").html());
 
 	$('#loginBtn').popover({ content: $('#login').html()});
 
@@ -149,6 +169,25 @@ $(document).ready(function () {
       $('#nonUserMenu').show();
       window.user = null;*/
       window.location.reload();
+    });
+  });
+
+  $('#addOfferForm .btn-primary').click(function (event) {
+    event.preventDefault();
+    $.post('/api/business/' + window.addOfferFor, $('#addOfferForm').serialize())
+    .done(function (resp) {
+      $('#addOfferModal').modal('hide');
+      notify('Your offer has been added', {type:'alert-success'});
+    });
+  });
+
+  $('#reviewForm .btn-primary').click(function (event) {
+    event.preventDefault();
+    $.post('/api/business/' + window.reviewFor + '/edit?reviewed=true', $('#reviewForm').serialize())
+    .done(function (resp) {
+      $('#reviewModal').modal('hide');
+      //@TODO: Change fields accordingly
+      notify('Thank you for reviewing this business', {type:'alert-success'});
     });
   });
 
@@ -170,6 +209,11 @@ $(document).ready(function () {
       notify('You have Succesfully created your business!', {type:'alert-success'});
       window.location.hash = '/business/' + resp.id;
     });
+  });
+
+  $('#search').keydown(function(event) {
+    if(event.keyCode==13)
+      window.location.hash='/search/' + $('#search').val();
   });
 
   $.ajax('/api/business?reviewed=false&count=5')

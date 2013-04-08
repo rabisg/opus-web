@@ -50,7 +50,7 @@
     <!-- <div class="row-fluid category"> Business Solutions... Simplified</div> -->
 
     <!-- Modal -->
-    <div id="signupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="signupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Signup" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
         <h3 id="myModalLabel">Signup</h3>
@@ -91,6 +91,49 @@
         <div class="modal-footer">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
           <button class="btn btn-primary" type="submit">Signup</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="addOfferModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Add Offer" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Add Offer</h3>
+      </div>
+      <form id="addOfferForm">
+        <div class="modal-body">
+          <textarea name="body" style="width:96%;"> "End Of Season Sale!! Starting Today!" </textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" type="submit">Add Offer</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="reviewModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="Add Offer" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Review</h3>
+      </div>
+      <form class="form-horizontal" id="reviewForm">
+        <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label" for="inputEmail">Name</label>
+            <div class="controls">
+              <input type="text" name="name" placeholder="Alma Mater T-Shirt Print">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Details</label>
+            <div class="controls">
+              <textarea name="details" rows="3" ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-primary" type="submit">Reiview</button>
         </div>
       </form>
     </div>
@@ -201,9 +244,6 @@
     <li><a >Location</a></li>
     <li><a >Quality/Rating</a></li>
     <li><a >Cost of Service</a></li>
-    <li class="nav-header">Sort horizontally by:</li>
-    <li><a >Quality/Rating</a></li>
-    <li><a >Timing</a></li>
   </ul>
 </div>
 </div>
@@ -226,8 +266,16 @@
 <div id="template-holder">
   <script id="entry-template" type="text/x-handlebars-template">
     {{#each list}}
-    <div class="li-item li-item-first white-bg cards">
-      <b>{{this.name}}:</b> {{this.details}}
+    <div class="li-item li-item-first white-bg cards">    
+      {{#if this.name}}
+        <b>{{this.name}}:</b> {{this.details}}
+      {{else}}
+        <em>This business has not been reviewed yet</em>
+        {{#if this.recordURI}}
+          <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+        {{/if}}
+      {{/if}}
+      <div class="cat">Category: {{this.category}}</div>
       <div class="btn-grp">
         {{#like this}}{{/like}}
         {{#subscribe this}}{{/subscribe}}
@@ -255,6 +303,22 @@
       <b>{{this.title}}:</b> {{this.body}}                         
     </div>
     {{/each}}
+  </script>
+  <script type="text/x-handlebars-template" id="search-template">
+  {{#each list}}
+  <a href="#/business/{{this._id}}">
+    <div class="li-item li-item-first white-bg cards link">    
+      {{#if this.name}}
+        <b>{{this.name}}:</b> {{this.details}}
+      {{else}}
+        <em>This business has not been reviewed yet</em>
+        {{#if this.recordURI}}
+          <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+        {{/if}}
+      {{/if}}
+    </div>
+  </a>
+  {{/each}}
   </script>
 </div>
 </body>

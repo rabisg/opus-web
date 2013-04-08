@@ -14,6 +14,7 @@ var businessSchema = new mongoose.Schema({
   pincode: {type:Number, required:true},
   phone: {type:String, required:true},
   details: {type:String, required:true},
+  recordURI: {type:String},
   category: {type:String, required:true},
   price: {type:Number, required:true},
   currency: {type:String, default:"rs"},

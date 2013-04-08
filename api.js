@@ -33,11 +33,13 @@ exports.loadResource = function(model, idString) {
 exports.addBusiness = function(req, res) {
   var phone = (req.session && req.session.user) ? req.session.user.phone : req.param('phone');
   var reviewed = (req.session && req.session.user) ? true : false;
+  var recordURI = req.param('details').substring(0,4)=='_REC' ? req.param('details') : undefined;
   var business = new Business({
     name: req.param('name'),
     pincode: req.param('pincode'),
     phone: phone,
     details: req.param('details'),
+    recordURI: recordURI,
     category: req.param('category'),
     price: req.param('price'),
     workingDays: req.param('workingDays'),
@@ -118,7 +120,7 @@ exports.addNotification = function(req, res) {
     });
   }
   else
-    res.send(403, {status:'error', error:'You are not the owner of this business! Your phone number is' + phone});
+    res.send(403, {status:'error', error:'You are not the owner of this business! Your phone number is ' + phone});
 };
 
 exports.like = function(req, res) {
@@ -157,17 +159,19 @@ exports.subscribe = function(req, res) {
 
 exports.allBusiness = function(req, res) {
   var limit = req.param('count') || 10,
-      reviewed = (req.param('reviewed') && req.param('reviewed')=="false") ? false : true;
+      //reviewed = (req.param('reviewed') && req.param('reviewed')=="false") ? false : true,
       sortBy = req.param('sortBy') || {timestamp: -1};
 
-  var find = {'reviewed':reviewed};
+  var find = {};
   if (req.param('category'))
     find.category = req.param('category');
+   if (req.param('reviewed'))
+    find.reviewed = req.param('reviewed')=="false" ? false : true;
   Business
   .find(find)
   .limit(limit)
   .sort(sortBy)
-  .select('id name pincode details category likes subscribers likedBy subscribedBy')
+  .select('id name pincode details category likes subscribers likedBy subscribedBy reviewed')
   .exec(function (err, businesses) {
     if(err) res.send(400, {status:'error', error: err});
     else res.send(200, {status:'ok', list: businesses});

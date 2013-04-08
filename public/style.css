@@ -130,8 +130,12 @@ body{
     z-index: 9999;
     text-align: center;
     position:fixed;
-    top:0px;
+    top:0;
 }
 .status-bar .alert-box {
     border-radius: 0 0 10px 10px;
+}
+
+.cat {
+    color: gray;
 }
