@@ -313,9 +313,9 @@
         <b>{{this.name}}:</b> {{this.details}}
       {{else}}
         <em>This business has not been reviewed yet</em>
-        {{#if this.recordURI}}
-          <a href="/recordings/{{this.recordURI}}" target="_blank" class="space"><i class="icon-play"></i>Recording</a>
-        {{/if}}
+      {{/if}}
+      {{#if this.recordURI}}
+        <br /><a href="/recordings/{{this.recordURI}}" target="_blank" class="space"><i class="icon-play"></i>Recording</a>
       {{/if}}
       <div class="cat">Category: {{this.category}}</div>
       <div class="btn-grp">
