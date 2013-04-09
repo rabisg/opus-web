@@ -20,8 +20,8 @@
         <img src= 'images/bg.png' class="top-bg"></img>
       </div>
       <div class="pull-right" id="nonUserMenu"> 
-        <button class="top-btn" >
-          <a id="loginBtn" class="top-btn-content" data-toggle="popover" data-placement="bottom" data-html="true">Login</a>
+        <button id="loginBtn" class="top-btn" data-toggle="popover" data-placement="bottom" data-html="true">
+          <a class="top-btn-content" data-toggle="popover" data-placement="bottom" data-html="true">Login</a>
         </button>
         <button class="top-btn" data-toggle="modal" data-target="#signupModal" >Signup</button>
       </div>
@@ -36,10 +36,10 @@
         </ul>
       </div>
       <div id="login" style="display:none">
-        <form id="loginForm" action="javascript:login()">
+        <form id="loginForm" action="javascript:void">
           <input type="text" name="email" placeholder="Email">
           <input type="password" name="password" placeholder="Password">
-          <button class="btn">Sign in</button>
+          <button id="loginBtn" class="btn" onclick="login()">Sign in</button>
         </form>
       </div>
     </div>
