@@ -1,5 +1,5 @@
 /* Global Templates */
-var t_entry, t_business, t_search;
+var t_entry, t_business, t_search, t_noti;
 
 $.ajaxSetup({
     error: function(jqXHR, status, thrownError) {
@@ -130,12 +130,18 @@ function login () {
 function showBusiness (id) {
   if (window.interval)
     window.clearInterval(window.interval);
+  $.ajax('/api/business/'+ id)
+  .done(function (resp) {
+    resp.notifications = resp.notifications.sort(function(a, b){ return a.timestamp < b.timestamp ;});
+    var html = t_business(resp);
+    $('#content').html(html);
+  });
   window.interval = setInterval(function() {
     $.ajax('/api/business/'+ id)
     .done(function (resp) {
       resp.notifications = resp.notifications.sort(function(a, b){ return a.timestamp < b.timestamp ;});
-      var html = t_business(resp);
-      $('#content').html(html);
+      var html = t_noti(resp);
+      $('#notifications').html(html);
     });
   }, 2000);
 }
@@ -171,7 +177,7 @@ $(document).ready(function () {
   t_entry = Handlebars.compile($("#entry-template").html());
   t_business = Handlebars.compile($("#business-template").html());
   t_search = Handlebars.compile($("#search-template").html());
-
+  t_noti = Handlebars.compile($("#noti-template").html());
 	$('#loginBtn').popover({ content: $('#login').html()});
 
   $('#logout').click(function (event) {

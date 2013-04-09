@@ -351,6 +351,10 @@
       <b>Working Days:</b> {{workingDays}} <br /><br />
       <b>Cost of Service:</b> Rs.{{price}}                            
     </div>
+    <div id="notifications">
+    </div>
+  </script>
+  <script type="text/x-handlebars-template" id="noti-template">
     {{#each notifications}}
     <div class="well white-bg orange" class="notifications" style="border:0;">                            
       <b>{{this.title}}:</b> {{#convert this.body}}{{/convert}}
