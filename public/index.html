@@ -334,12 +334,12 @@
       {{details}}
     {{else}}
       <em> This business has not been reviewed yet </em> <br />
-      {{#if recordURI}}
-        <audio controls style="width:95%;">
-          <source src="recordings/{{recordURI}}" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
-      {{/if}}
+    {{/if}}
+    {{#if recordURI}}
+      <audio controls style="width:95%;">
+        <source src="recordings/{{recordURI}}" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
     {{/if}}
     <div class="btn-grp">
       <a class="btn-small link orange" data-id="{{_id}}" ><i class="icon-thumbs-up"></i><b> {{likes}} likes</b></a>
