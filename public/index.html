@@ -335,7 +335,10 @@
     {{else}}
       <em> This business has not been reviewed yet </em> <br />
       {{#if recordURI}}
-        <a href="/recordings/{{this.recordURI}}" target="_blank">Recording</a>
+        <audio controls style="width:95%;">
+          <source src="recordings/{{recordURI}}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
       {{/if}}
     {{/if}}
     <div class="btn-grp">
